@@ -1,289 +1,114 @@
-function Random (min, max){ 
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 
-var x
-var rand
-var otvet
-var otvet1
-var otvet2
-var kof
-var kof3
-var random
-var ravno
-var equation
-var on_off = 0
-const btn = document.getElementById('button');
-const urovnenie = document.getElementById('urovnenie');
-const otvet_na = document.getElementById('otvet_na');
+var on_off = 0;
 
-function kvad(otvet1, otvet2) {
-    let equation = ""
-    if (otvet1 > 0 && otvet2 > 0) {
-        equation = `x² - ${otvet1 + otvet2}x + ${otvet1 * otvet2}`
-    }
-    else if (otvet1 < 0 && otvet2 < 0) {
-        equation = `x² + ${-1 * (otvet1 + otvet2)}x + ${otvet1 * otvet2}`
-    }
-
-
-    else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 > 0)) {
-        equation = `x² - ${otvet1 + otvet2}x - ${-1 * otvet1 * otvet2}`
-    }
-    else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 < 0)) {
-        equation = `x² + ${-1 * (otvet1 + otvet2)}x - ${-1 * otvet1 * otvet2}`
-    }
-
-
-    else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 > 0)) {
-        equation = `x² - ${otvet1 + otvet2}x - ${-1 * otvet1 * otvet2}`
-    }
-    else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 < 0)) {
-        equation = `x² + ${-1 * (otvet1 + otvet2)}x - ${-1 * otvet1 * otvet2}`
-    }
-
-
-    else if (otvet1 == 0 && otvet2 > 0) {
-        equation = `x² - ${otvet2}x`
-    }
-    else if (otvet1 == 0 && otvet2 < 0) {
-        equation = `x² + ${-1 * otvet2}x`
+function kvad_format(a, b, c) {
+    let eq = "";
+    if (a !== 0) {
+        if (a === 1) eq += "x²";
+        else if (a === -1) eq += "-x²";
+        else eq += a + "x²";
     }
     
-    else if (otvet1 > 0 && otvet2 == 0) {
-        equation = `x² - ${otvet1}x`
-    }
-    else if (otvet1 < 0 && otvet2 == 0) {
-        equation = `x² + ${-1 * otvet1}x `
-    }
+    if (b !== 0) {
+        if (b > 0 && a !== 0) eq += " + ";
+        else if (b < 0) { eq += " - "; b = -b; }
 
-
-    else if (otvet1 == 0 && otvet2 == 0) {
-        equation = `x²`
-    }
-
-
-    else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 == 0)) {
-        equation = `x² - ${-1 * otvet1 * otvet2}`
-    }
-    else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 == 0)) {
-        equation = `x² - ${-1 * otvet1 * otvet2}`
+        if (b === 1) eq += "x";
+        else eq += b + "x";
     }
     
-    return equation
+    if (c !== 0) {
+        if (c > 0 && (a !== 0 || b !== 0)) eq += " + ";
+        else if (c < 0) { eq += " - "; c = -c; }
+
+        eq += c;
+    }
+    if (eq === "") return "0";
+    return eq;
 }
 
-function kor_off (x) {
-    random = Random(0, 1)
+function kor_off(x) {
+    let random = Random(0, 1);
+    let equation, solHTML, kof, ravno;
+    
     if (random == 0) {
-        kof = Random(1, 9)
-        while ((x - kof) <= 0) {
-            kof -= 1
+        kof = Random(1, 20);
+        ravno = Math.sqrt(x + kof);
+        while (ravno % 1 !== 0) {
+            kof = Random(1, 20);
+            ravno = Math.sqrt(x + kof);
         }
-        kof2 = x - kof
-        equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x - ${kof}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof2}</span>`
+        equation = `<span>&radic;</span><span style="border-top: 1px solid black">x + ${kof}</span> = ${ravno}`;
+        solHTML = `<p>Исходное уравнение: <b>${equation}</b></p>
+                   <p>Возводим обе части в квадрат:</p>
+                   <p>x + ${kof} = ${ravno * ravno}</p>
+                   <p>x = ${ravno * ravno} - ${kof} = <b>${x}</b></p>`;
+    } else {
+        kof = Random(1, 20);
+        ravno = Math.sqrt(x - kof);
+        while (ravno % 1 !== 0 || isNaN(ravno)) {
+            kof = Random(1, 20);
+            if (x - kof >= 0) {
+                ravno = Math.sqrt(x - kof);
+            }
+        }
+        equation = `<span>&radic;</span><span style="border-top: 1px solid black">x - ${kof}</span> = ${ravno}`;
+        solHTML = `<p>Исходное уравнение: <b>${equation}</b></p>
+                   <p>Возводим обе части в квадрат:</p>
+                   <p>x - ${kof} = ${ravno * ravno}</p>
+                   <p>x = ${ravno * ravno} + ${kof} = <b>${x}</b></p>`;
     }
-    else if (random == 1) {
-        kof = Random(1, 9)
-        kof2 = x + kof
-        equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x + ${kof}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof2}</span>`
-    }
-    return equation
+    
+    return {
+        eqHTML: `<p>${equation}</p>`,
+        answers: [x],
+        ansHTML: `<p>x = ${x}</p>`,
+        solHTML: solHTML
+    };
 }
 
-function kor_on (otvet1, otvet2) {
-    random = Random(0, 3)
-    if (random == 0) {
-        equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">${kvad(otvet1, otvet2)}</span> = 0`
-        return equation
-    }
-    else if (random == 1) {
-        kof = Random(1, 5)
-        if (otvet1 > 0 && otvet2 > 0) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² - ${otvet1 + otvet2}x + ${otvet1 * otvet2 + (kof ** 2)}</span> = ${kof}`
-        }
-        else if (otvet1 < 0 && otvet2 < 0) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² + ${-1 * (otvet1 + otvet2)}x + ${otvet1 * otvet2 + (kof ** 2)}</span> = ${kof}`
-        }
+function kor_on(x1, x2) {
+    let a = 1, b = -(x1 + x2), c = x1 * x2;
+    let k = Random(1, 5);
+    c += k*k;
     
-    
-        else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 > 0)) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² - ${otvet1 + otvet2}x ${otvet1 * otvet2 + (kof ** 2)}</span> = ${kof}`
-        }
-        else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 < 0)) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² + ${-1 * (otvet1 + otvet2)}x ${otvet1 * otvet2 + (kof ** 2)}</span> = ${kof}`
-        }
-    
-    
-        else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 > 0)) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² - ${otvet1 + otvet2}x ${otvet1 * otvet2 + (kof ** 2)}</span> = ${kof}`
-        }
-        else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 < 0)) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² + ${-1 * (otvet1 + otvet2)}x ${otvet1 * otvet2 + (kof ** 2)}</span> = ${kof}`
-        }
-    
-    
-        else if (otvet1 == 0 && otvet2 > 0) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² - ${otvet2}x + ${(kof ** 2)}</span> = ${kof}`
-        }
-        else if (otvet1 == 0 && otvet2 < 0) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² + ${-1 * otvet2}x + ${(kof ** 2)}</span> = ${kof}`
-        }
-        
-        else if (otvet1 > 0 && otvet2 == 0) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² - ${otvet1}x + ${(kof ** 2)}</span> = ${kof}`
-        }
-        else if (otvet1 < 0 && otvet2 == 0) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² + ${-1 * otvet1}x + ${(kof ** 2)}</span> = ${kof}`
-        }
-    
-    
-        else if (otvet1 == 0 && otvet2 == 0) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² + ${kof ** 2}</span> = ${kof}`
-        }
-    
-    
-        else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 == 0)) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² ${otvet1 * otvet2 + (kof ** 2)}</span> = ${kof}`
-        }
-        else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 == 0)) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² ${otvet1 * otvet2 + (kof ** 2)}</span> = ${kof}`
-        }
-        
-        return equation
-    }
-    else if (random == 2) {
-        kof = Random(1, 5)
-        if (otvet1 > 0 && otvet2 > 0) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² - ${otvet1 + otvet2}x + ${otvet1 * otvet2 + (kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof ** 2}</span>`
-        }
-        else if (otvet1 < 0 && otvet2 < 0) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² + ${-1 * (otvet1 + otvet2)}x + ${otvet1 * otvet2 + (kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof ** 2}</span>`
-        }
-    
-    
-        else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 > 0)) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² - ${otvet1 + otvet2}x ${otvet1 * otvet2 + (kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof ** 2}</span>`
-        }
-        else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 < 0)) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² + ${-1 * (otvet1 + otvet2)}x ${otvet1 * otvet2 + (kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof ** 2}</span>`
-        }
-    
-    
-        else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 > 0)) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² - ${otvet1 + otvet2}x ${otvet1 * otvet2 + (kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof ** 2}</span>`
-        }
-        else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 < 0)) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² + ${-1 * (otvet1 + otvet2)}x ${otvet1 * otvet2 + (kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof ** 2}</span>`
-        }
-    
-    
-        else if (otvet1 == 0 && otvet2 > 0) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² - ${otvet2}x + ${(kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof ** 2}</span>`
-        }
-        else if (otvet1 == 0 && otvet2 < 0) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² + ${-1 * otvet2}x + ${(kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof ** 2}</span>`
-        }
-        
-        else if (otvet1 > 0 && otvet2 == 0) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² - ${otvet1}x + ${(kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof ** 2}</span>`
-        }
-        else if (otvet1 < 0 && otvet2 == 0) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² + ${-1 * otvet1}x + ${(kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof ** 2}</span>`
-        }
-    
-    
-        else if (otvet1 == 0 && otvet2 == 0) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² + ${kof ** 2}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof ** 2}</span>`
-        }
-    
-    
-        else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 == 0)) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² ${otvet1 * otvet2 + (kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof ** 2}</span>`
-        }
-        else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 == 0)) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">x² ${otvet1 * otvet2 + (kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof ** 2}</span>`
-        }
-    }
-    else if (random == 3) {
-        kof = Random(1, 5)
-        kof3 = Random(2, 5)
-        if (otvet1 > 0 && otvet2 > 0) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">${1 + kof3}x² - ${otvet1 + otvet2}x + ${otvet1 * otvet2 + (kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof3}x² + ${kof ** 2}</span>`
-        }
-        else if (otvet1 < 0 && otvet2 < 0) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">${1 + kof3}x² + ${-1 * (otvet1 + otvet2)}x + ${otvet1 * otvet2 + (kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof3}x² + ${kof ** 2}</span>`
-        }
-    
-    
-        else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 > 0)) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">${1 + kof3}x² - ${otvet1 + otvet2}x ${otvet1 * otvet2 + (kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof3}x² + ${kof ** 2}</span>`
-        }
-        else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 < 0)) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">${1 + kof3}x² + ${-1 * (otvet1 + otvet2)}x ${otvet1 * otvet2 + (kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof3}x² + ${kof ** 2}</span>`
-        }
-    
-    
-        else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 > 0)) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">${1 + kof3}x² - ${otvet1 + otvet2}x ${otvet1 * otvet2 + (kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof3}x² + ${kof ** 2}</span>`
-        }
-        else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 < 0)) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">${1 + kof3}x² + ${-1 * (otvet1 + otvet2)}x ${otvet1 * otvet2 + (kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof3}x² + ${kof ** 2}</span>`
-        }
-    
-    
-        else if (otvet1 == 0 && otvet2 > 0) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">${1 + kof3}x² - ${otvet2}x + ${(kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof3}x² + ${kof ** 2}</span>`
-        }
-        else if (otvet1 == 0 && otvet2 < 0) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">${1 + kof3}x² + ${-1 * otvet2}x + ${(kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof3}x² + ${kof ** 2}</span>`
-        }
-        
-        else if (otvet1 > 0 && otvet2 == 0) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">${1 + kof3}x² - ${otvet1}x + ${(kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof3}x² + ${kof ** 2}</span>`
-        }
-        else if (otvet1 < 0 && otvet2 == 0) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">${1 + kof3}x² + ${-1 * otvet1}x + ${(kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof3}x² + ${kof ** 2}</span>`
-        }
-    
-    
-        else if (otvet1 == 0 && otvet2 == 0) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">${1 + kof3}x² + ${kof ** 2}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof3}x² + ${kof ** 2}</span>`
-        }
-    
-    
-        else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 == 0)) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">${1 + kof3}x² ${otvet1 * otvet2 + (kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof3}x² + ${kof ** 2}</span>`
-        }
-        else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 == 0)) {
-            equation = `<span>&#8730;</span><span  style="border-top: 1px solid black">${1 + kof3}x² ${otvet1 * otvet2 + (kof ** 2)}</span> = <span>&#8730;</span><span  style="border-top: 1px solid black">${kof3}x² + ${kof ** 2}</span>`
-        }
-    
-    }
-    return equation
+    let eq = `<span>&radic;</span><span style="border-top: 1px solid black">${kvad_format(a, b, c)}</span> = ${k}`;
+    let solHTML = `<p>Исходное уравнение: <b>${eq}</b></p>
+                   <p>Возводим в квадрат:</p>
+                   <p>${kvad_format(a, b, c)} = ${k*k}</p>
+                   <p>${kvad_format(a, b, c - k*k)} = 0</p>
+                   <p>Корни: <b>x₁ = ${x1}, x₂ = ${x2}</b></p>`;
+
+    return {
+        eqHTML: `<p>${eq}</p>`,
+        answers: [x1, x2],
+        ansHTML: `<p>x₁ = ${x1}&nbsp;&nbsp;&nbsp;&nbsp;x₂ = ${x2}</p>`,
+        solHTML: solHTML
+    };
 }
+
 
 function fun1() {
-    var chbox;
-    chbox=document.getElementById('one');
-    if (chbox.checked) {
-        on_off = 1;
-    }
-    else {
-        on_off = 0;
-    }
+    var chbox = document.getElementById('one');
+    on_off = chbox.checked ? 1 : 0;
 }
-btn.onclick = function() {
-    if (on_off == 1) {
-        var otvet1 = Random(-20, -6)
-        var otvet2 = Random(6, 20)
-        otvet = `x<sub>1</sub> = ` + otvet1 + '&nbsp' + '&nbsp' + '&nbsp' + '&nbsp' + '&nbsp' + '&nbsp' + '&nbsp' + `x<sub>2</sub> = ` + otvet2
-        urovnenie.innerHTML = kor_on(otvet1, otvet2);
-        otvet_na.innerHTML = String(otvet);
-    }
-    else {
-        var otvet = Random(2, 40)
-        urovnenie.innerHTML = kor_off(otvet);
-        otvet_na.innerHTML = `x = ${otvet}`
+
+const btn = document.getElementById('button');
+const urovnenie = document.getElementById('urovnenie');
+
+if (btn) {
+    btn.onclick = function() {
+        let data;
+        if (on_off == 1) {
+            let x1 = Random(-20, -6);
+            let x2 = Random(6, 20);
+            data = kor_on(x1, x2);
+        } else {
+            let x = Random(2, 40);
+            data = kor_off(x);
         }
+
+        urovnenie.innerHTML = data.eqHTML;
+        setEquationData(data.answers, data.ansHTML, data.solHTML);
+    }
 }

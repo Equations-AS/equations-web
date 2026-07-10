@@ -1,156 +1,100 @@
-var on_off = 0
-var kof
-var otvet
-function Random (min, max){ 
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+
+var on_off = 0;
+
+function kvad_format(a, b, c) {
+    let eq = "";
+    if (a !== 0) {
+        if (a === 1) eq += "x²";
+        else if (a === -1) eq += "-x²";
+        else eq += a + "x²";
+    }
+    
+    if (b !== 0) {
+        if (b > 0 && a !== 0) eq += " + ";
+        else if (b < 0) { eq += " - "; b = -b; }
+
+        if (b === 1) eq += "x";
+        else eq += b + "x";
+    }
+
+    if (c !== 0) {
+        if (c > 0 && (a !== 0 || b !== 0)) eq += " + ";
+        else if (c < 0) { eq += " - "; c = -c; }
+
+        eq += c;
+    }
+    
+    return eq + " = 0";
 }
 
-function kvad_off(otvet1, otvet2) {
-    let equation = ""
-    let kof = Random(2, 4)
-    if (otvet1 > 0 && otvet2 > 0) {
-        equation = `x² - ${otvet1 + otvet2}x + ${otvet1 * otvet2} = 0`
-    }
-    else if (otvet1 < 0 && otvet2 < 0) {
-        equation = `x² + ${-1 * (otvet1 + otvet2)}x + ${otvet1 * otvet2} = 0`
-    }
-
-
-    else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 > 0)) {
-        equation = `x² - ${otvet1 + otvet2}x - ${-1 * otvet1 * otvet2} = 0`
-    }
-    else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 < 0)) {
-        equation = `x² + ${-1 * (otvet1 + otvet2)}x - ${-1 * otvet1 * otvet2} = 0`
-    }
-
-
-    else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 > 0)) {
-        equation = `x² - ${otvet1 + otvet2}x - ${-1 * otvet1 * otvet2} = 0`
-    }
-    else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 < 0)) {
-        equation = `x² + ${-1 * (otvet1 + otvet2)}x - ${-1 * otvet1 * otvet2} = 0`
-    }
-
-
-    else if (otvet1 == 0 && otvet2 > 0) {
-        equation = `x² - ${otvet2}x  = 0`
-    }
-    else if (otvet1 == 0 && otvet2 < 0) {
-        equation = `x² + ${-1 * otvet2}x = 0`
-    }
+function kvad_off(x1, x2) {
+    let a = 1;
+    let b = -(x1 + x2);
+    let c = x1 * x2;
     
-    else if (otvet1 > 0 && otvet2 == 0) {
-        equation = `x² - ${otvet1}x  = 0`
-    }
-    else if (otvet1 < 0 && otvet2 == 0) {
-        equation = `x² + ${-1 * otvet1}x = 0`
-    }
+    let equation = kvad_format(a, b, c);
 
+    let solHTML = `<p>Исходное уравнение: <b>${equation}</b></p>
+                   <p>Используем теорему Виета:</p>
+                   <p>x₁ + x₂ = ${-b}</p>
+                   <p>x₁ * x₂ = ${c}</p>
+                   <p>Отсюда корни: <b>x₁ = ${x1}, x₂ = ${x2}</b></p>`;
 
-    else if (otvet1 == 0 && otvet2 == 0) {
-        equation = `x² = 0`
-    }
-
-
-    else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 == 0)) {
-        equation = `x² - ${-1 * otvet1 * otvet2} = 0`
-    }
-    else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 == 0)) {
-        equation = `x² - ${-1 * otvet1 * otvet2} = 0`
-    }
-    
-    return equation
+    return {
+        eqHTML: `<p>${equation}</p>`,
+        answers: [x1, x2],
+        ansHTML: `<p>x₁ = ${x1}&nbsp;&nbsp;&nbsp;&nbsp;x₂ = ${x2}</p>`,
+        solHTML: solHTML
+    };
 }
 
-
-function kvad_on(otvet1, otvet2) {
-    let equation = ""
-    let kof = Random(2, 4)
-    if (otvet1 > 0 && otvet2 > 0) {
-        equation = `${kof}x² - ${kof * (otvet1 + otvet2)}x + ${kof * otvet1 * otvet2} = 0`
-    }
-    else if (otvet1 < 0 && otvet2 < 0) {
-        equation = `${kof}x² + ${-1 * kof * (otvet1 + otvet2)}x + ${kof * otvet1 * otvet2} = 0`
-    }
-
-
-    else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 > 0)) {
-        equation = `${kof}x² - ${kof * (otvet1 + otvet2)}x - ${-1 * kof * otvet1 * otvet2} = 0`
-    }
-    else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 < 0)) {
-        equation = `${kof}x² + ${-1 * (kof * (otvet1 + otvet2))}x - ${-1 * kof * otvet1 * otvet2} = 0`
-    }
-
-
-    else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 > 0)) {
-        equation = `${kof}x² - ${kof * (otvet1 + otvet2)}x - ${-1 * kof * otvet1 * otvet2} = 0`
-    }
-    else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 < 0)) {
-        equation = `${kof}x² + ${-1 * kof * (otvet1 + otvet2)}x - ${-1 * kof * otvet1 * otvet2} = 0`
-    }
-
-
-    else if (otvet1 == 0 && otvet2 > 0) {
-        equation = `${kof}x² - ${kof *otvet2}x  = 0`
-    }
-    else if (otvet1 == 0 && otvet2 < 0) {
-        equation = `${kof}x² + ${-1 * kof * otvet2}x = 0`
-    }
+function kvad_on(x1, x2) {
+    let k = Random(2, 4);
+    let a = k;
+    let b = -k * (x1 + x2);
+    let c = k * x1 * x2;
     
-    else if (otvet1 > 0 && otvet2 == 0) {
-        equation = `${kof}x² - ${kof * otvet1}x  = 0`
-    }
-    else if (otvet1 < 0 && otvet2 == 0) {
-        equation = `${kof}x² + ${-1 * kof * otvet1}x = 0`
-    }
+    let equation = kvad_format(a, b, c);
 
+    let D = b*b - 4*a*c;
 
-    else if (otvet1 == 0 && otvet2 == 0) {
-        equation = `${kof}x² = 0`
-    }
+    let solHTML = `<p>Исходное уравнение: <b>${equation}</b></p>
+                   <p>Найдем дискриминант: D = b² - 4ac = (${b})² - 4*(${a})*(${c}) = ${b*b} - ${4*a*c} = ${D}</p>
+                   <p>√D = ${Math.sqrt(D)}</p>
+                   <p>x₁,₂ = (-b ± √D) / 2a = (${-b} ± ${Math.sqrt(D)}) / ${2*a}</p>
+                   <p><b>x₁ = ${x1}, x₂ = ${x2}</b></p>`;
 
-
-    else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 == 0)) {
-        equation = `${kof}x² - ${-1 * kof * (otvet1 * otvet2)} = 0`
-    }
-    else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 == 0)) {
-        equation = `${kof}x² - ${-1 * kof * (otvet1 * otvet2)} = 0`
-    }
-    
-    return equation
+    return {
+        eqHTML: `<p>${equation}</p>`,
+        answers: [x1, x2],
+        ansHTML: `<p>x₁ = ${x1}&nbsp;&nbsp;&nbsp;&nbsp;x₂ = ${x2}</p>`,
+        solHTML: solHTML
+    };
 }
 
 
-var otvet1 = Random(-20, 20)
-var otvet2 = Random(-20, 20)
+function fun1() {
+    var chbox = document.getElementById('one');
+    on_off = chbox.checked ? 1 : 0;
+}
 
 const btn = document.getElementById('button');
 const urovnenie = document.getElementById('urovnenie');
-const otvet_na = document.getElementById('otvet_na');
 
-function fun1() {
-    var chbox;
-    chbox=document.getElementById('one');
-    if (chbox.checked) {
-        on_off = 1;
-    }
-    else {
-        on_off = 0;
-    }
-}
-btn.onclick = function() {
-    if (on_off == 1) {
-        var otvet1 = Random(-30, 30)
-        var otvet2 = Random(-30, 30)
-        otvet = `x<sub>1</sub> = ` + otvet1 + '&nbsp' + '&nbsp' + '&nbsp' + '&nbsp' + '&nbsp' + '&nbsp' + '&nbsp' + `x<sub>2</sub> = ` + otvet2
-        urovnenie.innerHTML = kvad_on(otvet1, otvet2);
-        otvet_na.innerHTML = String(otvet);
-    }
-    else {
-        var otvet1 = Random(-8, -1)
-        var otvet2 = Random(1, 8)  
-        otvet = `x<sub>1</sub> = ` + otvet1 + '&nbsp' + '&nbsp' + '&nbsp' + '&nbsp' + '&nbsp' + '&nbsp' + '&nbsp' + `x<sub>2</sub> = ` + otvet2
-        urovnenie.innerHTML = kvad_off(otvet1, otvet2);
-        otvet_na.innerHTML = String(otvet);
+if (btn) {
+    btn.onclick = function() {
+        let data;
+        if (on_off == 1) {
+            let x1 = Random(-20, 20);
+            let x2 = Random(-20, 20);
+            data = kvad_on(x1, x2);
+        } else {
+            let x1 = Random(-8, -1);
+            let x2 = Random(1, 8);
+            data = kvad_off(x1, x2);
+        }
+
+        urovnenie.innerHTML = data.eqHTML;
+        setEquationData(data.answers, data.ansHTML, data.solHTML);
     }
 }

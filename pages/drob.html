@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../styles/style_drob.css">
-    <link rel="stylesheet" href="../styles/menu.css">
-    <link rel="stylesheet" href="../styles/switch.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <script defer src="../JS/ui.js"></script>
     <script defer src="../JS/script_drob.js"></script>
     <title>Дробные Уравнения</title>
     <link rel="apple-touch-icon" sizes="180x180" href="../images/favicon_io/apple-touch-icon.png">
@@ -16,69 +15,91 @@
 </head>
 <body>
     <header>
-        <div id="head">
-            <div class="logo">
-                <a href="../index.html"><img  src="../images/LOGO.png" alt=""></a>
-            </div>             
-        </div>
-        <div class="discord">
-            <a href="https://discord.gg/564Gc242">
-                <img src="../images/discord.png" alt="">
+        <div class="logo">
+            <a href="../index.html">
+                <img src="../images/LOGO.png" alt="Equations-Online Logo" onerror="this.src='https://via.placeholder.com/150x40?text=Equations-Online'">
             </a>
         </div>
-        <div class="vk">
-            <a href="https://vk.com/public212643332">
-                <img src="../images/vk.png" alt="">
-            </a>
+        <div class="social-links">
+            <a href="https://discord.gg/564Gc242" title="Discord"><img src="../images/discord.png" alt="Discord" onerror="this.src='https://via.placeholder.com/30'"></a>
+            <a href="https://vk.com/public212643332" title="VK"><img src="../images/vk.png" alt="VK" onerror="this.src='https://via.placeholder.com/30'"></a>
+            <a href="https://t.me/equations_online" title="Telegram"><img src="../images/telega.png" alt="Telegram" onerror="this.src='https://via.placeholder.com/30'"></a>
         </div>
-        <div class="telega">
-            <a href="https://t.me/equations_online">
-                <img src="../images/telega.png" alt="">
-            </a>
-        </div>
-        <div id="menu">
-            <div class="cnopka" onclick="openMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <ul>
-                <li>Меню сайта</li>
-                <li><a href="../index.html">Главная страница</a></li>
-                <li><a href="line.html">Линейные уравнения</a></li>
-                <li><a href="kvad.html">Квадратные уравнения</a></li>
-                <li><a href="log.html">Логарифмические уравнения</a></li>
-                <li><a href="module.html">Модульные уравнения</a></li>
-                <li><a href="kor.html">Иррациональные уравнения</a></li>
-                <li><a href="step.html">Степенные уравнения</a></li>
-                <li><a href="drob.html">Дробные уравнения</a></li>
-            </ul>
-        </div> 
-        <script>
-            function openMenu() {
-                document.getElementById("menu").classList.toggle('active');
-            }
-        </script> 
     </header>
+
+    <div id="menu">
+        <div class="menu-toggle" onclick="openMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul>
+            <li>Меню сайта</li>
+            <li><a href="../index.html">Главная страница</a></li>
+            <li><a href="line.html">Линейные уравнения</a></li>
+            <li><a href="kvad.html">Квадратные уравнения</a></li>
+            <li><a href="log.html">Логарифмические уравнения</a></li>
+            <li><a href="module.html">Модульные уравнения</a></li>
+            <li><a href="kor.html">Иррациональные уравнения</a></li>
+            <li><a href="step.html">Степенные уравнения</a></li>
+            <li><a href="drob.html">Дробные уравнения</a></li>
+            <li><a href="trig.html">Тригонометрические уравнения</a></li>
+            <li><a href="system.html">Системы уравнений</a></li>
+        </ul>
+    </div>
+
     <main>
-        <div class="switch">
-            <input type="checkbox" id="one" onchange="fun1()">
+        <div class="hero">
+            <h1>Дробные Уравнения</h1>
         </div>
-        <div class="knopka">
-            <input type="button" value="Random" id="button" style="width:100px;height:50px">
+
+        <div class="equation-card">
+            <div class="controls-top">
+                <div class="switch-container">
+                    <span>Сложно:</span>
+                    <label class="switch">
+                        <input type="checkbox" id="one" onchange="fun1()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <input type="button" value="Сгенерировать" id="button" class="btn btn-success">
+            </div>
+
+            <div id="urovnenie" class="equation-display">
+                <p>Нажмите "Сгенерировать", чтобы получить уравнение</p>
+            </div>
+
+            <div class="input-area" id="input-area" style="display:none;">
+                <div id="result-message" class="result-message"></div>
+                <div class="input-group">
+                    <label for="user_answer_1">x₁:</label>
+                    <input type="text" id="user_answer_1" placeholder="x₁">
+                    <label for="user_answer_2" id="label_answer_2" style="display:none;">x₂:</label>
+                    <input type="text" id="user_answer_2" placeholder="x₂" style="display:none;">
+                </div>
+                <div class="action-buttons mt-2">
+                    <button class="btn btn-secondary" onclick="checkAnswer()">Проверить ответ</button>
+                    <button class="btn" id="btn-show-answer" style="display:none;" onclick="toggleAnswer()">Показать ответ</button>
+                    <button class="btn" id="btn-show-solution" style="display:none;" onclick="toggleSolution()">Показать решение</button>
+                </div>
+            </div>
+
+            <div id="otvet_na" class="answer-display">
+                <h3>Ответ:</h3>
+                <div id="otvet_content"></div>
+            </div>
+
+            <div id="solution" class="solution-display">
+                <h3>Решение:</h3>
+                <div id="solution_content"></div>
+            </div>
         </div>
-        <div id="urovnenie" class="urovnenie">Уравнение</div>
-        <div id="otvet_na" class="otvet_na"><p>Ответ</p></div>
-        <style>
-            .urovnenie {
-             padding: 15px 3px;
-             text-align: center;
-           }
-            .otvet_na {
-             padding: 15px 3px;
-             text-align: center;
-           }
-        </style>
     </main>
+
+    <script>
+        function openMenu() {
+            document.getElementById("menu").classList.toggle('active');
+        }
+    </script>
 </body>
 </html>

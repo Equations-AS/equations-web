@@ -1,184 +1,102 @@
-function Random (min, max){ 
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 
-var otvet
-var otvet1
-var otvet2
-var kof
-var kof3
-var random
-var ravno
-var equation
-var on_off = 0
-const btn = document.getElementById('button');
-const urovnenie = document.getElementById('urovnenie');
-const otvet_na = document.getElementById('otvet_na');
+var on_off = 0;
 
-function kvad(otvet1, otvet2) {
-    let equation = ""
-    if (otvet1 > 0 && otvet2 > 0) {
-        equation = `x² - ${otvet1 + otvet2}x + ${otvet1 * otvet2}`
-    }
-    else if (otvet1 < 0 && otvet2 < 0) {
-        equation = `x² + ${-1 * (otvet1 + otvet2)}x + ${otvet1 * otvet2}`
-    }
-
-
-    else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 > 0)) {
-        equation = `x² - ${otvet1 + otvet2}x - ${-1 * otvet1 * otvet2}`
-    }
-    else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 < 0)) {
-        equation = `x² + ${-1 * (otvet1 + otvet2)}x - ${-1 * otvet1 * otvet2}`
-    }
-
-
-    else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 > 0)) {
-        equation = `x² - ${otvet1 + otvet2}x - ${-1 * otvet1 * otvet2}`
-    }
-    else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 < 0)) {
-        equation = `x² + ${-1 * (otvet1 + otvet2)}x - ${-1 * otvet1 * otvet2}`
-    }
-
-
-    else if (otvet1 == 0 && otvet2 > 0) {
-        equation = `x² - ${otvet2}x`
-    }
-    else if (otvet1 == 0 && otvet2 < 0) {
-        equation = `x² + ${-1 * otvet2}x`
+function kvad_format(a, b, c) {
+    let eq = "";
+    if (a !== 0) {
+        if (a === 1) eq += "x²";
+        else if (a === -1) eq += "-x²";
+        else eq += a + "x²";
     }
     
-    else if (otvet1 > 0 && otvet2 == 0) {
-        equation = `x² - ${otvet1}x`
-    }
-    else if (otvet1 < 0 && otvet2 == 0) {
-        equation = `x² + ${-1 * otvet1}x `
-    }
+    if (b !== 0) {
+        if (b > 0 && a !== 0) eq += " + ";
+        else if (b < 0) { eq += " - "; b = -b; }
 
-
-    else if (otvet1 == 0 && otvet2 == 0) {
-        equation = `x²`
-    }
-
-
-    else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 == 0)) {
-        equation = `x² - ${-1 * otvet1 * otvet2}`
-    }
-    else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 == 0)) {
-        equation = `x² - ${-1 * otvet1 * otvet2}`
+        if (b === 1) eq += "x";
+        else eq += b + "x";
     }
     
-    return equation
+    if (c !== 0) {
+        if (c > 0 && (a !== 0 || b !== 0)) eq += " + ";
+        else if (c < 0) { eq += " - "; c = -c; }
+
+        eq += c;
+    }
+    if (eq === "") return "0";
+    return eq;
 }
 
-function module_off (kof, ravno, random) {
+function module_off(kof, ravno, random) {
+    let x1, x2, equation, solHTML;
+
     if (random == 0) {
-        otvet1 = ravno + kof
-        otvet2 = ((-1) * ravno) + kof
-        equation = `|x - ${kof}| = ${ravno}`
+        x1 = ravno + kof;
+        x2 = (-ravno) + kof;
+        equation = `|x - ${kof}| = ${ravno}`;
+        solHTML = `<p>Исходное уравнение: <b>${equation}</b></p>
+                   <p>Раскрываем модуль:</p>
+                   <p>1) x - ${kof} = ${ravno} => x = ${ravno} + ${kof} = <b>${x1}</b></p>
+                   <p>2) x - ${kof} = -${ravno} => x = -${ravno} + ${kof} = <b>${x2}</b></p>`;
+    } else {
+        x1 = ravno - kof;
+        x2 = (-ravno) - kof;
+        equation = `|x + ${kof}| = ${ravno}`;
+        solHTML = `<p>Исходное уравнение: <b>${equation}</b></p>
+                   <p>Раскрываем модуль:</p>
+                   <p>1) x + ${kof} = ${ravno} => x = ${ravno} - ${kof} = <b>${x1}</b></p>
+                   <p>2) x + ${kof} = -${ravno} => x = -${ravno} - ${kof} = <b>${x2}</b></p>`;
     }
-    else if (random == 1) {
-        otvet1 = ravno - kof
-        otvet2 = ((-1) * ravno) - kof
-        equation = `|x + ${kof}| = ${ravno}`
-    }
-    return equation
+    
+    return {
+        eqHTML: `<p>${equation}</p>`,
+        answers: [x1, x2],
+        ansHTML: `<p>x₁ = ${x1}&nbsp;&nbsp;&nbsp;&nbsp;x₂ = ${x2}</p>`,
+        solHTML: solHTML
+    };
 }
 
-function module_on (otvet1, otvet2) {
-    random = Random(0, 1)
-    if (random == 0) {
-        equation = `|${kvad(otvet1, otvet2)}| = 0`
-    }
-    else if (random == 1) {
-        kof = Random(1, 5)
-        kof3 = Random(2, 5)
-        if (otvet1 > 0 && otvet2 > 0) {
-            equation = `|${1 + kof3}x² - ${otvet1 + otvet2}x + ${otvet1 * otvet2 + (kof ** 2)}| = |${kof3}x² + ${kof ** 2}|`
-        }
-        else if (otvet1 < 0 && otvet2 < 0) {
-            equation = `|${1 + kof3}x² + ${-1 * (otvet1 + otvet2)}x + ${otvet1 * otvet2 + (kof ** 2)}| = |${kof3}x² + ${kof ** 2}|`
-        }
+function module_on(x1, x2) {
+    let a = 1, b = -(x1 + x2), c = x1 * x2;
+    let eq = `|${kvad_format(a, b, c)}| = 0`;
     
-    
-        else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 > 0)) {
-            equation = `|${1 + kof3}x² - ${otvet1 + otvet2}x ${otvet1 * otvet2 + (kof ** 2)}| = |${kof3}x² + ${kof ** 2}|`
-        }
-        else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 < 0)) {
-            equation = `|${1 + kof3}x² + ${-1 * (otvet1 + otvet2)}x ${otvet1 * otvet2 + (kof ** 2)}| = |${kof3}x² + ${kof ** 2}|`
-        }
-    
-    
-        else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 > 0)) {
-            equation = `|${1 + kof3}x² - ${otvet1 + otvet2}x ${otvet1 * otvet2 + (kof ** 2)}| = |${kof3}x² + ${kof ** 2}|`
-        }
-        else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 < 0)) {
-            equation = `|${1 + kof3}x² + ${-1 * (otvet1 + otvet2)}x ${otvet1 * otvet2 + (kof ** 2)}| = |${kof3}x² + ${kof ** 2}|`
-        }
-    
-    
-        else if (otvet1 == 0 && otvet2 > 0) {
-            equation = `|${1 + kof3}x² - ${otvet2}x + ${(kof ** 2)}| = |${kof3}x² + ${kof ** 2}|`
-        }
-        else if (otvet1 == 0 && otvet2 < 0) {
-            equation = `|${1 + kof3}x² + ${-1 * otvet2}x + ${(kof ** 2)}| = |${kof3}x² + ${kof ** 2}|`
-        }
-        
-        else if (otvet1 > 0 && otvet2 == 0) {
-            equation = `|${1 + kof3}x² - ${otvet1}x + ${(kof ** 2)}| = |${kof3}x² + ${kof ** 2}|`
-        }
-        else if (otvet1 < 0 && otvet2 == 0) {
-            equation = `|${1 + kof3}x² + ${-1 * otvet1}x + ${(kof ** 2)}| = |${kof3}x² + ${kof ** 2}|`
-        }
-    
-    
-        else if (otvet1 == 0 && otvet2 == 0) {
-            equation = `|${1 + kof3}x² + ${kof ** 2}| = |${kof3}x² + ${kof ** 2}|`
-        }
-    
-    
-        else if ((otvet1 < 0 && otvet2 > 0) && (otvet1 + otvet2 == 0)) {
-            equation = `|${1 + kof3}x² ${otvet1 * otvet2 + (kof ** 2)}| = |${kof3}x² + ${kof ** 2}|`
-        }
-        else if ((otvet1 > 0 && otvet2 < 0) && (otvet1 + otvet2 == 0)) {
-            equation = `|${1 + kof3}x² ${otvet1 * otvet2 + (kof ** 2)}| = |${kof3}x² + ${kof ** 2}|`
-        }
-    }
-    return equation
+    let solHTML = `<p>Исходное уравнение: <b>${eq}</b></p>
+                   <p>Модуль равен нулю, только если подмодульное выражение равно нулю:</p>
+                   <p>${kvad_format(a, b, c)} = 0</p>
+                   <p>Корни: <b>x₁ = ${x1}, x₂ = ${x2}</b></p>`;
+
+    return {
+        eqHTML: `<p>${eq}</p>`,
+        answers: [x1, x2],
+        ansHTML: `<p>x₁ = ${x1}&nbsp;&nbsp;&nbsp;&nbsp;x₂ = ${x2}</p>`,
+        solHTML: solHTML
+    };
 }
+
 
 function fun1() {
-    var chbox;
-    chbox=document.getElementById('one');
-    if (chbox.checked) {
-        on_off = 1;
-    }
-    else {
-        on_off = 0;
-    }
+    var chbox = document.getElementById('one');
+    on_off = chbox.checked ? 1 : 0;
 }
-btn.onclick = function() {
-    if (on_off == 1) {
-        var otvet1 = Random(-20, 20)
-        var otvet2 = Random(-20, 20)
-        otvet = `x<sub>1</sub> = ` + otvet1 + '&nbsp' + '&nbsp' + '&nbsp' + '&nbsp' + '&nbsp' + '&nbsp' + '&nbsp' + `x<sub>2</sub> = ` + otvet2
-        urovnenie.innerHTML = module_on(otvet1, otvet2);
-        otvet_na.innerHTML = String(otvet);
+
+const btn = document.getElementById('button');
+const urovnenie = document.getElementById('urovnenie');
+
+if (btn) {
+    btn.onclick = function() {
+        let data;
+        if (on_off == 1) {
+            let x1 = Random(-15, 15);
+            let x2 = Random(-15, 15);
+            data = module_on(x1, x2);
+        } else {
+            let random = Random(0, 1);
+            let kof = Random(1, 9);
+            let ravno = Random(1, 9);
+            data = module_off(kof, ravno, random);
+        }
+
+        urovnenie.innerHTML = data.eqHTML;
+        setEquationData(data.answers, data.ansHTML, data.solHTML);
     }
-    else {
-        var random = Random(0, 1)
-        var kof = Random(1, 9)
-        var ravno = Random(1, 9)
-        if (random == 0) {
-            otvet1 = ravno + kof
-            otvet2 = ((-1) * ravno) + kof
-        }
-        else if (random == 1) {
-            otvet1 = ravno - kof
-            otvet2 = ((-1) * ravno) - kof
-        }
-        otvet = `x<sub>1</sub> = ` + otvet1 + '&nbsp' + '&nbsp' + '&nbsp' + '&nbsp' + '&nbsp' + '&nbsp' + '&nbsp' + `x<sub>2</sub> = ` + otvet2
-        urovnenie.innerHTML = module_off(kof, ravno, random);
-        otvet_na.innerHTML = otvet
-        }
 }
