@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles/main.css">
     <script defer src="../JS/ui.js"></script>
-    <script defer src="../JS/script_line.js"></script>
-    <title>Линейные Уравнения</title>
+    <script defer src="../JS/script_trig.js"></script>
+    <title>Тригонометрические Уравнения</title>
     <link rel="apple-touch-icon" sizes="180x180" href="../images/favicon_io/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon_io/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon_io/favicon-16x16.png">
@@ -50,7 +50,7 @@
 
     <main>
         <div class="hero">
-            <h1>Линейные Уравнения</h1>
+            <h1>Тригонометрические Уравнения</h1>
         </div>
 
         <div class="equation-card">
@@ -71,12 +71,15 @@
 
             <div class="input-area" id="input-area" style="display:none;">
                 <div id="result-message" class="result-message"></div>
-                <div class="input-group">
-                    <label for="user_answer">Ваш ответ:</label>
-                    <input type="text" id="user_answer" placeholder="Введите x">
+                <div class="input-group" style="flex-direction: column; align-items: flex-start; margin: 0 auto; width: 100%;">
+                    <p style="margin-bottom: 10px; font-size: 0.9em; color: #555;">Используйте 'pi' для π и 'k' для периода. Пример: pi/6 + 2*pi*k</p>
+                    <div style="display: flex; gap: 10px;">
+                        <label for="user_answer_1">x₁:</label>
+                        <input type="text" id="user_answer_1" placeholder="x₁" style="width: 250px;">
+                    </div>
                 </div>
                 <div class="action-buttons mt-2">
-                    <button class="btn btn-secondary" onclick="checkAnswer()">Проверить ответ</button>
+                    <button class="btn btn-secondary" onclick="checkTrigAnswer()">Проверить ответ</button>
                     <button class="btn" id="btn-show-answer" style="display:none;" onclick="toggleAnswer()">Показать ответ</button>
                     <button class="btn" id="btn-show-solution" style="display:none;" onclick="toggleSolution()">Показать решение</button>
                 </div>
@@ -97,6 +100,33 @@
     <script>
         function openMenu() {
             document.getElementById("menu").classList.toggle('active');
+        }
+
+        function checkTrigAnswer() {
+            revealButtons();
+            const val = document.getElementById('user_answer_1').value.replace(/\s+/g, '').toLowerCase();
+            const resultMsg = document.getElementById('result-message');
+
+            if (val === '') {
+                showResult(resultMsg, false, "Введите ответ.");
+                return;
+            }
+
+            // Очень простая проверка строки (для демонстрации)
+            let isCorrect = false;
+            for (let i = 0; i < currentAnswers.length; i++) {
+                let ans = currentAnswers[i].replace(/\s+/g, '').toLowerCase();
+                if (val === ans) {
+                    isCorrect = true;
+                    break;
+                }
+            }
+
+            if (isCorrect) {
+                showResult(resultMsg, true, "Правильно!");
+            } else {
+                showResult(resultMsg, false, "Неправильно. Ожидаемый формат: " + currentAnswers[0]);
+            }
         }
     </script>
 </body>

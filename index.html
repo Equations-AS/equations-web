@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/style_index.css">
-    <link rel="stylesheet" href="styles/menu.css">
+    <link rel="stylesheet" href="styles/main.css">
     <script defer src="JS/script_button.js"></script>
     <title>Equations-Online</title>
     <link rel="apple-touch-icon" sizes="180x180" href="images/favicon_io/apple-touch-icon.png">
@@ -15,59 +14,62 @@
 </head>
 <body>
     <header>
-    
-        <div id="head">
-            <div class="logo">
-                <a href="index.html"><img  src="images/LOGO.png" alt=""></a>
-            </div>             
-        </div>
-        <div class="discord">
-            <a href="https://discord.gg/w6xbtmND">
-                <img src="images/discord.png" alt="">
+        <div class="logo">
+            <a href="index.html">
+                <img src="images/LOGO.png" alt="Equations-Online Logo" onerror="this.src='https://via.placeholder.com/150x40?text=Equations-Online'">
             </a>
         </div>
-        <div class="vk">
-            <a href="https://vk.com/public212643332">
-                <img src="images/vk.png" alt="">
-            </a>
+        <div class="social-links">
+            <a href="https://discord.gg/w6xbtmND" title="Discord"><img src="images/discord.png" alt="Discord" onerror="this.src='https://via.placeholder.com/30'"></a>
+            <a href="https://vk.com/public212643332" title="VK"><img src="images/vk.png" alt="VK" onerror="this.src='https://via.placeholder.com/30'"></a>
+            <a href="https://t.me/equations_online" title="Telegram"><img src="images/telega.png" alt="Telegram" onerror="this.src='https://via.placeholder.com/30'"></a>
         </div>
-        <div class="telega">
-            <a href="https://t.me/equations_online">
-                <img src="images/telega.png" alt="">
-            </a>
-        </div>
-        <div id="menu">
-            <div class="cnopka" onclick="openMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <ul>
-                <li>Меню сайта</li>
-                <li><a href="index.html">Главная страница</a></li>
-                <li><a href="pages/line.html">Линейные уравнения</a></li>
-                <li><a href="pages/kvad.html">Квадратные уравнения</a></li>
-                <li><a href="pages/log.html">Логарифмические уравнения</a></li>
-                <li><a href="pages/module.html">Модульные уравнения</a></li>
-                <li><a href="pages/kor.html">Иррациональные уравнения</a></li>
-                <li><a href="pages/step.html">Степенные уравнения</a></li>
-                <li><a href="pages/drob.html">Дробные уравнения</a></li>
-            </ul>
-        </div> 
-        <script>
-            function openMenu() {
-                document.getElementById("menu").classList.toggle('active');
-            }
-        </script> 
     </header>
+
+    <div id="menu">
+        <div class="menu-toggle" onclick="openMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul>
+            <li>Меню сайта</li>
+            <li><a href="index.html">Главная страница</a></li>
+            <li><a href="pages/line.html" >Линейные уравнения</a></li>
+            <li><a href="pages/kvad.html">Квадратные уравнения</a></li>
+            <li><a href="pages/log.html">Логарифмические уравнения</a></li>
+            <li><a href="pages/module.html">Модульные уравнения</a></li>
+            <li><a href="pages/kor.html">Иррациональные уравнения</a></li>
+            <li><a href="pages/step.html">Степенные уравнения</a></li>
+            <li><a href="pages/drob.html">Дробные уравнения</a></li>
+            <li><a href="pages/trig.html">Тригонометрические уравнения</a></li>
+            <li><a href="pages/system.html">Системы уравнений</a></li>
+        </ul>
+    </div>
+
     <main>
-        <div class="zagolovok"><h1><B>Добро пожаловать на сайт Equations-Online</B></h1></div>
-        <div class="podzagolovok"><h2>Здесь вы сможете проверить свои знания с помощью решения различных видов уравнений</h2></div>
-        <div class="vubor"><h2>Не знаете с чего начать? Тогда за вас выберет случай:</h2></div>
-        <div class="random" id="random"><a href="pages/kor.html">Нажми</a></div>
-        <div class="knopka">
-            <input type="button" value="Random" id="button">
+        <div class="hero">
+            <h1>Добро пожаловать на сайт Equations-Online</h1>
+            <h2>Здесь вы сможете проверить свои знания с помощью решения различных видов уравнений</h2>
+        </div>
+
+        <div class="equation-card">
+            <h3>Не знаете с чего начать? Тогда за вас выберет случай:</h3>
+
+            <div id="random" class="equation-display" style="min-height: 50px; font-size: 1.2rem; margin: 2rem 0;">
+                <a href="pages/kor.html" style="text-decoration: none; color: var(--primary-color);">Нажми</a>
+            </div>
+
+            <div class="action-buttons">
+                <input type="button" value="Случайное уравнение" id="button" class="btn btn-large">
+            </div>
         </div>
     </main>
+
+    <script>
+        function openMenu() {
+            document.getElementById("menu").classList.toggle('active');
+        }
+    </script>
 </body>
 </html>
